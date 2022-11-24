@@ -1,8 +1,10 @@
-import santacruz from './santacruz.jpg'
-
+import routes from './router'
+import { useRoutes } from 'react-router-dom'
 export default function App() {
-    console.log(santacruz)
-    return <div>
-        <img src={santacruz} alt="santacruz" />
-    </div>
+    // const
+    return (
+        <>
+            {useRoutes(routes)}
+        </>
+    )
 }

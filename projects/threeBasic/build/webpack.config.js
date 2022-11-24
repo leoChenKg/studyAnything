@@ -6,7 +6,8 @@ module.exports = {
   entry: './src/index.tsx',
   output: {
     filename: 'index.js',
-    path: path.join(process.cwd(), 'dist')
+    path: path.join(process.cwd(), 'dist'),
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -43,6 +44,7 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 3001
+    port: 3001,
+    historyApiFallback: true
   }
 }
