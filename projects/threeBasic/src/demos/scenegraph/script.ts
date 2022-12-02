@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
-export  function useDemo1(canvas: HTMLCanvasElement) {
-  const renderer = new THREE.WebGLRenderer({ canvas })
+export function useDemo1(canvas: HTMLCanvasElement) {
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
 
   const fov = 40
   const aspect = 2 // the canvas default
@@ -14,28 +14,25 @@ export  function useDemo1(canvas: HTMLCanvasElement) {
 
   const scene = new THREE.Scene()
 
-  {
-    const color = 0xffffff
-    const intensity = 3
-    const light = new THREE.PointLight(color, intensity)
-    scene.add(light)
-  }
+  // 光线
+  const light = new THREE.PointLight(0xffffff, 3)
+  scene.add(light)
 
-  // an array of objects who's rotation to update
+  // 旋转列表
   const objects: Array<any> = []
 
   const radius = 1
   const widthSegments = 6
   const heightSegments = 6
+  // 球形几何体
   const sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments)
-
   const sunMaterial = new THREE.MeshPhongMaterial({ emissive: 0xffff00 })
   const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial)
   sunMesh.scale.set(5, 5, 5)
   scene.add(sunMesh)
   objects.push(sunMesh)
 
-  function resizeRendererToDisplaySize(renderer: any) {
+  function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
     const canvas = renderer.domElement
     const width = canvas.clientWidth
     const height = canvas.clientHeight
@@ -46,7 +43,7 @@ export  function useDemo1(canvas: HTMLCanvasElement) {
     return needResize
   }
 
-  function render(time: any) {
+  function render(time: number) {
     time *= 0.001
 
     if (resizeRendererToDisplaySize(renderer)) {

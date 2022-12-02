@@ -4,6 +4,7 @@ const htmlPlugin = require('html-webpack-plugin')
 module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
+  devtool: 'source-map',
   output: {
     filename: 'index.js',
     path: path.join(process.cwd(), 'dist'),
@@ -44,6 +45,7 @@ module.exports = {
     })
   ],
   devServer: {
+    hot: true,
     port: 3001,
     historyApiFallback: true
   }
