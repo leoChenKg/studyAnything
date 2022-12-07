@@ -1,4 +1,10 @@
 {
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@utils/*": ["./src/utils/*"]
+    }
+  },
   "extends": "../../tsconfig.json",
   "include": ["./src/**/*", "../../module.d.ts"]
 }

@@ -13,7 +13,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
-      '@threejs/*': '../../../../three.js/*'
+      '@utils': path.resolve(__dirname, '../src/utils')
     }
   },
   module: {

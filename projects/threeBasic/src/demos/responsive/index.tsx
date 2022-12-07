@@ -1,4 +1,4 @@
-import { useEffect, useRef, FC } from 'react'
+import { useRef, FC } from 'react'
 import { useDemo1 } from './script'
 import styled from 'styled-components'
 

@@ -7,14 +7,15 @@ const routes: Array<RouteObject> = [
   {
     path: "/",
     element: <HomePage />
+  }
+  ,
+  {
+    path: "/demos/responsive",
+    element: <Responsive />
   },
   {
     path: "/demos/scenegraph",
     element: <Scenegraph />
-  },
-  {
-    path: "/demos/responsive",
-    element: <Responsive />
   }
 ]
 
