@@ -133,3 +133,13 @@ select {
 #content::-webkit-scrollbar {
   width: 4px;
 }
+
+
+.hidden {
+  display: none; 
+}
+
+
+#inputWrapper {
+  display: flex;
+}

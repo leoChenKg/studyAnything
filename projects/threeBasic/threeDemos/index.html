@@ -22,7 +22,7 @@
       </div>
 
       <div id="panelScrim"></div>
-
+     
       <div id="contentWrapper">
         <div id="inputWrapper">
           <input
@@ -34,6 +34,7 @@
             spellcheck="false"
           />
           <div id="exitSearchButton"></div>
+          <button id="backtop">backtop</button>
         </div>
 
         <div id="content">
@@ -56,6 +57,10 @@
       const viewSrcButton = document.getElementById('button')
       const panelScrim = document.getElementById('panelScrim')
       const previewsToggler = document.getElementById('previewsToggler')
+      const backtop = document.getElementById('backtop')
+      backtop.onclick = () => {
+        content.scrollTop = 0
+      }
 
       const sectionLink = document.querySelector('#sections > a')
       const sectionDefaultHref = sectionLink.href
