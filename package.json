@@ -7,6 +7,9 @@
   "workspaces": [
     "projects/*"
   ],
+  "scripts": {
+    "dev:threeBasic": "yarn  workspace threeBasic run dev"
+  },
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.20.2",

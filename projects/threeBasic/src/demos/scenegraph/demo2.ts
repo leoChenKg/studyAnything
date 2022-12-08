@@ -21,4 +21,6 @@ export default function useDemo(canvasConRef: React.RefObject<HTMLDivElement>) {
   const Sun = new THREE.Mesh(planetGeometry, material)
   secen.add(Sun)
 
+  
+
 }

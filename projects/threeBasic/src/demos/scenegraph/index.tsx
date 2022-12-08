@@ -1,5 +1,5 @@
 import { useRef, FC } from 'react'
-import { useDemo1, useDemo2 } from './script'
+import { useDemo1, useDemo2,useDemo3 } from './script'
 import styled from 'styled-components'
 
 const BaseCon = styled.div`
@@ -28,6 +28,7 @@ const Scenegraph: FC = () => {
   const canvasContainer = useRef<HTMLDivElement>(null)
   useDemo1(canvasContainer)
   useDemo2(canvasContainer)
+  useDemo3(canvasContainer)
   return (
     <BaseCon >
       <h3>scenegraph</h3>
