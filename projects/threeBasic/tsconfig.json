@@ -7,5 +7,6 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": ["./src/**/*", "../../react-env.d.ts"]
+  "include": ["./src/**/*", "../../react-env.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
