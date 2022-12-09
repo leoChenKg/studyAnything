@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
       "@utils/*": ["./src/utils/*"]
     }
   },
   "extends": "../../tsconfig.json",
-  "include": ["./src/**/*", "../../module.d.ts"]
+  "include": ["./src/**/*", "../../react-env.d.ts"]
 }
