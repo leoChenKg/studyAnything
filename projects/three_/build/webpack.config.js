@@ -1,6 +1,6 @@
 const path = require('path')
 const htmlPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+// const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   mode: 'development',
@@ -44,14 +44,14 @@ module.exports = {
     new htmlPlugin({
       template: path.resolve(__dirname, '../public/index.html')
     }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, '../public/three.js-dev/examples'),
-          to: path.resolve(__dirname, './dist/public')
-        }
-      ]
-    })
+    // new CopyPlugin({
+    //   patterns: [
+    //     {
+    //       from: path.resolve(__dirname, '../public/three.js-dev/examples'),
+    //       to: path.resolve(__dirname, './dist/public')
+    //     }
+    //   ]
+    // })
   ],
   devServer: {
     hot: true,
@@ -62,7 +62,7 @@ module.exports = {
       directory: path.join(__dirname, '../public'),
       //指定我们要通过/public访问到directory设置的静态资源
       //（这个很重要如果不设置默认是通过 / 访问directory设置的静态资源，会和默认访问index.html冲突）
-      publicPath: '/demos'
+      // publicPath: '/demos'
     }
   }
 }
