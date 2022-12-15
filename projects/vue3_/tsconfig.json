@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "lib": ["DOM", "ESNext"]
+  },
   "extends": "../../tsconfig.json",
   "include": ["./src/**/*", "../../vue-env.d.ts"],
   "exclude": ["node_modules", "dist"]
