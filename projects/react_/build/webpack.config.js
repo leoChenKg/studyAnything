@@ -23,7 +23,7 @@ module.exports = {
         loader: 'ts-loader'
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader'
       },
       {
