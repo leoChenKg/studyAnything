@@ -8,7 +8,7 @@ const text = shallowRef({
 
 const click = () => {
   text.value.text += '1123'
-//   triggerRef(text)
+  triggerRef(text)
 }
 
 

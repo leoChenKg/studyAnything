@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, Directive, inject } from 'vue'
+import { ref, onMounted, Directive, inject, getCurrentInstance, ComponentInternalInstance } from 'vue'
 import setupVue from './demos/setup.vue'
 import setup2Vue from './demos/setup2.vue'
 import setup3Vue from './demos/setup3.vue'
@@ -7,6 +7,8 @@ import refVue from './demos/ref.vue'
 import computedVue from './demos/computed.vue'
 import reactiveVue from './demos/reactive.vue'
 import watchEffectVue from './demos/watchEffect.vue'
+import toRefsDemo from './parts/toRefs.vue'
+import triggerRefVue from './parts/triggerRef.vue'
 import { key } from './index'
 const setup2VueRef = ref<{ add: (n: number | undefined) => void }>()
 const { globalCnt } = inject(key)!
@@ -38,6 +40,9 @@ onMounted(() => {
 const clickTest = () => {
   console.log('clickTest')
 }
+
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
+console.log(proxy?.$translate('leoo'), '--=-=')
 </script>
 <template>
   <div v-my>
@@ -62,5 +67,9 @@ const clickTest = () => {
     <!-- <computedVue/> -->
     <!-- <reactiveVue/> -->
     <!-- <watchEffectVue /> -->
+    ------------------------
+    <toRefsDemo />
+    ------------------------
+    <triggerRefVue />
   </div>
 </template>

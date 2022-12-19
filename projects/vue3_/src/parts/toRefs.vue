@@ -18,13 +18,14 @@ const refs = {
 }
 
 const clickHandler = () => {
-  newObj.age++
+  // newObj.age++
+  obj.age++
 }
 </script>
 
 <template>
   <div>{{ newObj.age }}</div>
-  <div>{{ obj.age }}</div>
+  <div>obj.sge{{ obj.age }}</div>
   <div>{{ age }}</div>
   <div>{{ refs.age }}</div>
   <button @click="clickHandler">click</button>
