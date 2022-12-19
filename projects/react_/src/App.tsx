@@ -2,7 +2,7 @@ import React from 'react'
 import StateDemo from './demos/state'
 import ContextDemo from './demos/context'
 import RefsDemo from './demos/refs'
-
+import './demos/hyperCom'
 export default function App() {
     const refsDemoInnerRef = React.createRef<HTMLElement>()
 
