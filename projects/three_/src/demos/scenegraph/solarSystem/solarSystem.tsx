@@ -1,6 +1,7 @@
 import { WebGLRenderer, PerspectiveCamera, Scene, PointLight, Object3D, SphereGeometry, MeshPhongMaterial, Mesh } from 'three'
 import { useEffect } from "react";
 import resizeRendererToDisplaySize from '@utils/resizeRendererToDisplaySize'
+import { createGUI, makeAxisGrid } from './makeAxisGrid';
 
 
 export default function SolarSystem(canvasConRef: React.RefObject<HTMLDivElement>) {
@@ -25,6 +26,7 @@ export default function SolarSystem(canvasConRef: React.RefObject<HTMLDivElement
 
     const rotationObjs: Array<Mesh | Object3D> = []
     const solarSystem = new Object3D()
+    solarSystem.scale.set(2, 2, 2)
     scene.add(solarSystem)
     const erthSystem = new Object3D()
     erthSystem.position.x = 20
@@ -49,6 +51,16 @@ export default function SolarSystem(canvasConRef: React.RefObject<HTMLDivElement
 
     rotationObjs.push(solarSystem, erthSystem, sunMesh, erthMesh, moonMesh)
 
+    // 添加辅助工具显示坐标轴和xoy平面
+    const gui = createGUI()
+    makeAxisGrid(gui, solarSystem, 'solarSystem', 50)
+    makeAxisGrid(gui, erthSystem, 'erthSystem')
+    makeAxisGrid(gui, sunMesh, 'sunMesh')
+    makeAxisGrid(gui, erthMesh, 'erthMesh')
+    makeAxisGrid(gui, moonMesh, 'moonMesh')
+
+
+
     function render(time: number) {
         if (resizeRendererToDisplaySize(rendered)) {
             const canvas = rendered.domElement
@@ -65,6 +77,7 @@ export default function SolarSystem(canvasConRef: React.RefObject<HTMLDivElement
     }
     requestAnimationFrame(render)
 }
+
 
 
 

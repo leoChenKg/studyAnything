@@ -11,13 +11,13 @@ export default class AxisGridHelper {
 
     constructor(node: THREE.Mesh | THREE.Object3D<THREE.Event>, units = 10) {
         const axes = new THREE.AxesHelper();
-        ; (axes.material as Material).depthTest = false
+        ; (axes.material as Material).depthTest = false // 防止元素遮挡坐标轴
         axes.renderOrder = 2 // 在网格渲染之后再渲染
         node.add(axes)
 
         const grid = new THREE.GridHelper(units, units);
         ; (grid.material as Material).depthTest = false
-        grid.renderOrder = 1
+        grid.renderOrder = 1 // 首先渲染网格
         node.add(grid)
 
         this.grid = grid
