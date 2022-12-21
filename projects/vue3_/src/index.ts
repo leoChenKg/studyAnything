@@ -1,5 +1,6 @@
 import { createApp, ref, InjectionKey, Ref } from 'vue'
-import App from './App.vue'
+// import App from './App.vue'
+import App from './todos/todoApp.vue'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

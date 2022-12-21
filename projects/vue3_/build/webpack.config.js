@@ -33,6 +33,10 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
         test: /\.(png|jpe?g|gif|webp|svg)$/,
         type: 'asset',
         parser: {
@@ -49,11 +53,11 @@ module.exports = {
     new VueLoaderPlugin(),
     new htmlPlugin({
       template: path.resolve(__dirname, '../public/index.html')
-    }),
+    })
   ],
   devServer: {
     hot: true,
     port: 3003,
-    historyApiFallback: true,
+    historyApiFallback: true
   }
 }

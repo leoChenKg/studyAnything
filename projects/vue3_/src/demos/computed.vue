@@ -35,7 +35,7 @@ export default {
 }
 </script>
 <template>
-  <div>computed</div>
+  <div class="x">computed</div>
   <div>{{ computedCnt }}</div>
   <button @click="change">click</button>
 </template>
