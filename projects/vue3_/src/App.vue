@@ -41,8 +41,8 @@ const clickTest = () => {
   console.log('clickTest')
 }
 
-const { proxy } = getCurrentInstance() as ComponentInternalInstance
-console.log(proxy?.$translate('leoo'), '--=-=')
+// const { proxy } = getCurrentInstance() as ComponentInternalInstance
+// console.log()
 </script>
 <template>
   <div v-my>

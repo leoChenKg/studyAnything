@@ -1,33 +1,10 @@
 import { createApp, ref, InjectionKey, Ref } from 'vue'
 // import App from './App.vue'
 import App from './todos/todoApp.vue'
-
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $translate: (key: string) => string
-    $sum: (a: number, b: number) => number
-  }
-}
+import enhanceApp from './enhanceApp'
+export { key } from './enhanceApp'
 
 const app = createApp(App)
-app.use({
-  install(app) {
-    app.config.globalProperties = {
-      $translate: (key: string) => key + '1',
-      $sum: (a: number, b: number) => a + b
-    }
-    // app.config.globalProperties.$sum = (a: number, b: number) => a + b
-  }
-})
-const globalCnt = ref(0)
-export const key = Symbol('globalCntMsg') as InjectionKey<{
-  globalCnt: Ref<number>
-  addGlobalCnt: () => void
-}>
-app.provide(key, {
-  globalCnt,
-  addGlobalCnt: () => {
-    globalCnt.value++
-  }
-})
+enhanceApp(app)
+
 app.mount('#app')

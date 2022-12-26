@@ -1,10 +1,10 @@
 {
-  "name": "vue3_",
+  "name": "@study/vue3_",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.20.5",
+    "@babel/core": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.0",
     "css-loader": "^6.7.3",
@@ -20,6 +20,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "@vue/runtime-core": "^3.2.45",
     "vue": "^3.2.45"
   },
   "scripts": {
