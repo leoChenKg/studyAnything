@@ -1,26 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { useTasks } from './useTasks'
+import { useTasks } from './useTasks'
 
-// const isShowDetails = ref(true)
+const isShowDetails = ref(true)
 
-// const tasks = useTasks()
+const tasks = useTasks()
 </script>
 
 <template>
   <div class="title"></div>
-  <div class="main-con">
+  <div class="main-con" :class="isShowDetails ? 'with-details' : ''">
     <div class="left-con">
       <div class="top-bar"></div>
       <div class="tasks-con">
-        <!-- <div class="task-item-con" v-for="(task, idx) in tasks" :key="idx"></div> -->
+        <div class="task-item-con" v-for="(task, idx) in tasks" :key="idx"></div>
       </div>
       <div class="bottom-bar"></div>
     </div>
-    <div class="right-con"></div>
+    <div class="right-con">
+      <div @click="isShowDetails = false">hide</div>
+    </div>
   </div>
 </template>
-<style lang="less" scoped>
+
+<style scoped lang="less">
 .title {
   height: 64px;
   box-sizing: border-box;
