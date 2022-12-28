@@ -1,23 +1,50 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { useTasks } from './useTasks'
+import { useTasks } from './useTasks'
+import customCheckBox from './checkBox.vue'
 
-// const isShowDetails = ref(true)
+const isShowDetails = ref(false)
 
-// const tasks = useTasks()
+const tasks = useTasks()
 </script>
 
 <template>
   <div class="title"></div>
-  <div class="main-con">
+  <div class="main-con" :class="{ ' with-details': isShowDetails }">
     <div class="left-con">
-      <div class="top-bar"></div>
+      <div class="top-bar">
+        <div class="check-box-con"></div>
+        <a class="task-item-con-sub">
+          <div class="name">
+            <span>名称</span>
+          </div>
+          <div class="create-time">
+            <span>创建时间</span>
+          </div>
+          <div class="operations"></div>
+        </a>
+      </div>
       <div class="tasks-con">
-        <!-- <div class="task-item-con" v-for="(task, idx) in tasks" :key="idx"></div> -->
+        <div class="task-item-con" v-for="(task, idx) in tasks" :key="idx">
+          <div class="check-box-con">
+            <custom-check-box />
+          </div>
+          <a class="task-item-con-sub">
+            <div class="name">
+              <span>{{ task.name }}</span>
+            </div>
+            <div class="create-time">
+              <span>{{ task.createTime }}</span>
+            </div>
+            <div class="operations"></div>
+          </a>
+        </div>
       </div>
       <div class="bottom-bar"></div>
     </div>
-    <div class="right-con"></div>
+    <div class="right-con">
+      <button @click="isShowDetails = false">hide</button>
+    </div>
   </div>
 </template>
 <style lang="less" scoped>
@@ -48,29 +75,123 @@ import { ref } from 'vue'
     }
 
     .top-bar {
-      // border-bottom: 1px solid #eee;
+      display: flex;
+      font-size: 14px;
+
+      .check-box-con {
+        flex: 0 0 32px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .task-item-con-sub {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        user-select: none;
+
+        .name {
+          flex: 11 1;
+          height: 100%;
+        }
+
+        .create-time {
+          flex: 5 1;
+          height: 100%;
+        }
+
+        .operations {
+          flex: 0 0 64px;
+          height: 100%;
+        }
+
+        .name,
+        .create-time,
+        .operations {
+          display: flex;
+          align-items: center;
+          color: #646a73;
+        }
+      }
     }
 
     .tasks-con {
+      box-sizing: border-box;
+      padding: 0 6px;
       flex: 1;
       width: 100%;
       overflow-y: auto;
+      // padding: 0 6px 0 6px;
 
       .task-item-con {
         position: relative;
-        // border: 1px solid;
-
+        display: flex;
+        cursor: pointer;
+        font-size: 14px;
         height: 48px;
+        border-radius: 5px;
 
+        &:hover {
+          background-color: #edeeee;
+        }
+        &:last-child::after {
+          content: ' ';
+          position: absolute;
+          display: block;
+          left: 16px;
+          right: 10px;
+          height: 1px;
+          bottom: 0;
+          background-color: #ddd;
+        }
         &:before {
           content: '';
+          position: absolute;
           display: block;
           left: 16px;
           right: 10px;
           top: 0;
           height: 1px;
           background-color: #ddd;
-          position: absolute;
+        }
+
+        .check-box-con {
+          flex: 0 0 32px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        &-sub {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          user-select: none;
+
+          .name {
+            flex: 11 1;
+            height: 100%;
+            color: #1f2329;
+          }
+
+          .create-time {
+            flex: 5 1;
+            height: 100%;
+            color: #646a73;
+          }
+
+          .operations {
+            flex: 0 0 64px;
+            height: 100%;
+            color: #646a73;
+          }
+
+          .name,
+          .create-time,
+          .operations {
+            display: flex;
+            align-items: center;
+          }
         }
       }
 

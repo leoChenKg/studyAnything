@@ -3,6 +3,6 @@
     "lib": ["ESNext", "DOM"],
     "jsx": "preserve"
   },
-  "include": ["./src/**/*", ],
+  "include": ["./src/**/*", "../../vue-env.d.ts" ],
   "exclude": ["node_modules", "dist", "build"]
 }
