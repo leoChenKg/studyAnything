@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch, getCurrentInstance } from 'vue'
+import { ref, reactive, watch, getCurrentInstance, nextTick } from 'vue'
 import { useTasks, Task } from './useTasks'
 import customCheckBox from './checkBox.vue'
 import taskItem from './taskItem.vue'
@@ -48,11 +48,17 @@ const topCheckChange = checked => {
 }
 
 const addTask = e => {
+  const { refs } = curInstance
   if (isAdding.value) {
-    const { refs } = curInstance
     ;(refs[`taskRef_${tasks[0].id}`] as any[])[0].focusCheck()
     return
   }
+
+  if (curTask.value) {
+    curTask.value.isEdit = false
+    ;(refs[`taskRef_${curTask.value.id}`] as any[])[0].editOk()
+  }
+
   const newTask = {
     id: Math.random().toFixed(2) + 'id',
     isChecked: false,
@@ -67,7 +73,17 @@ const addTask = e => {
 }
 
 const edit = (task: Task) => {
+  const { refs } = curInstance
+  if (curTask.value) {
+    ;(refs[`taskRef_${curTask.value.id}`] as any)[0]?.editOk()
+    curTask.value.isEdit = false
+    isAdding.value = false
+  }
   task.isEdit = true
+  curTask.value = task
+  nextTick(() => {
+    ;(refs[`taskRef_${curTask.value.id}`] as any)[0]?.focusCheck()
+  })
 }
 const editOk = (task: Task) => {
   isAdding.value = false
