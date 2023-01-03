@@ -6,6 +6,6 @@ const root = createRoot(document.getElementById('app')!)
 root.render(
     <Router>
         {/* <App /> */}
-        <HooksApp/>
+        <HooksApp />
     </Router>
 )
