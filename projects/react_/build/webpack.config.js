@@ -27,6 +27,10 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
         test: /\.(png|jpe?g|gif|webp|svg)$/,
         type: 'asset',
         parser: {
@@ -42,11 +46,11 @@ module.exports = {
   plugins: [
     new htmlPlugin({
       template: path.resolve(__dirname, '../public/index.html')
-    }),
+    })
   ],
   devServer: {
     hot: true,
     port: 3002,
-    historyApiFallback: true,
+    historyApiFallback: true
   }
 }
