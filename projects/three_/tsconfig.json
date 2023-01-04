@@ -4,9 +4,10 @@
     "baseUrl": "./",
     "paths": {
       "@utils/*": ["./src/utils/*"]
-    }
+    },
+    // "outDir": "./dist"
   },
   "extends": "../../tsconfig.json",
   "include": ["./src/**/*", "../../react-env.d.ts"],
-  "exclude": ["node_modules", "dist", "build"]
+  "exclude": ["node_modules", "build"]
 }

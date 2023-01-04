@@ -5,9 +5,14 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "commitizen": "^4.2.6",
+    "cz-conventional-changelog": "^3.3.0",
+    "git-cm-cli": "^1.0.2",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
   },
-  "scripts": {}
+  "scripts": {
+    "cm": "cm"
+  }
 }
