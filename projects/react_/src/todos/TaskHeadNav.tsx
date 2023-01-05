@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, FC } from "react"
 import styled from "styled-components"
 import CheckBox, { CheckStatus, CheckboxProps } from "./CheckBox"
 
@@ -6,9 +6,10 @@ import CheckBox, { CheckStatus, CheckboxProps } from "./CheckBox"
 
 const TaskHeadNav = styled.nav` 
     height: 3rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
     display:  none;
     font-size: 0.875rem;
+    color: #666;
 
 
     .check-box-con, .name-con, .create-time-con,.opt-con {
@@ -38,22 +39,31 @@ const TaskHeadNav = styled.nav`
         }
     }
 `
+
+
+export const ReactCheckBox = styled(CheckBox)`
+    width: 1.2rem;
+    height: 1.2rem;
+
+    @media (min-width: 768px) {
+      & {
+        width: 1rem;
+        height: 1rem;
+      }
+
+    }
+
+`
+
+
 const Nav = () => {
-
-    const [state, setState] = useState<CheckStatus>("unchecked")
-
-    useEffect(() => {
-        setTimeout(() => {
-            setState("partial-checked")
-        }, 3000)
-    })
 
     const onChange: CheckboxProps["onChange"] = (status) => {
         console.log(status)
     }
     return <TaskHeadNav>
         <div className="check-box-con">
-            <CheckBox onChange={onChange} checkStatus={state} />
+            <ReactCheckBox onChange={onChange} />
         </div>
         <div className="name-con">
             <span>任务名称</span>

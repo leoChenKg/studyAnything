@@ -19,5 +19,7 @@ a { color:#666; text-decoration:none; }
 
 body,html,#app{
     height: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
+
 `

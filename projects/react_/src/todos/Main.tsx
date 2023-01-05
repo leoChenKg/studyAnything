@@ -4,7 +4,7 @@ const Main = styled.main`
     flex: 1;
     display: flex;
     overflow-y: auto;
-    padding: 0 1rem;
+    padding: 0 .5rem;
 
     & > article {
         flex: 1;
@@ -32,6 +32,9 @@ const Main = styled.main`
 
 
     @media (min-width: 768px) {
+        & {
+            padding: 0 1rem;
+        }
         &.show-details > aside {
             flex: 1;
             border-left: 1px solid #ddd;
