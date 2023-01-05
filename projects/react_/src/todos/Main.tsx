@@ -4,7 +4,8 @@ const Main = styled.main`
     flex: 1;
     display: flex;
     overflow-y: auto;
-    padding: 0 .5rem;
+    overflow-x: hidden;
+    padding: 0 0px 0 22px;
 
     & > article {
         flex: 1;
@@ -30,10 +31,31 @@ const Main = styled.main`
         height: 100%;
     }
 
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        display: none;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background-color: #ccc;
+        display: none;
+    }
+
+    &:hover {
+        &::-webkit-scrollbar-track {
+            display: block;
+        }
+        &::-webkit-scrollbar-thumb {
+            display: block;
+        }
+    }
 
     @media (min-width: 768px) {
         & {
-            padding: 0 1rem;
+            padding: 0 10px 0 16px;
         }
         &.show-details > aside {
             flex: 1;

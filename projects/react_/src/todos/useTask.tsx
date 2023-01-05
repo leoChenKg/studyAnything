@@ -33,9 +33,9 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
         }
     }, [{
         id: '1',
-        name: 'task1',
+        name: '任务一',
         createTime: '2023-01-05'
-    },{
+    }, {
         id: '2',
         name: 'task2',
         createTime: '2023-01-05'
@@ -125,7 +125,7 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
         name: 'task2',
         createTime: '2023-01-05'
     },
-])
+    ])
 
 
     return [tasks, dispatch]

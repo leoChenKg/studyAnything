@@ -1,19 +1,23 @@
 import { FC } from 'react'
 import styled from 'styled-components'
+import { CheckboxProps } from './CheckBox'
 import { ReactCheckBox } from './TaskHeadNav'
+import { Task } from './useTask'
 
-interface TaskItemProps {
-
+export interface TaskItemProps {
+    task: Task
+    checkChange: (task: Task, checked: boolean) => void
 }
 
 const ItemWrapper = styled.li`
-    display: flex;
     width: 100%;
     height: 4rem;
+    display: flex;
+    flex-direction: row-reverse;
     position: relative;
-    font-size: 1.125rem;
+    font-size: 1rem;
     color: #1f2329;
-    /* cursor: pointer; */
+    cursor: pointer;
     
     .check-box-con, .name-con, .create-time-con,.opt-con {
         display: flex;
@@ -31,13 +35,19 @@ const ItemWrapper = styled.li`
         justify-content: center;
 
         .name-con {
-            /* flex: 1.5 2; */
-            margin-bottom: .25rem;
         }
         .create-time-con {
-            /* flex: 1 3; */
             font-size: .875rem;
             color: #aaa;
+        }
+
+        .name-con ,.create-time-con {
+            span {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+          
         }
     }
    
@@ -48,6 +58,7 @@ const ItemWrapper = styled.li`
 
     @media (min-width: 768px) {
         & {
+            flex-direction: row;
             height: 3.75rem;
             font-size: 0.875rem;
 
@@ -55,8 +66,10 @@ const ItemWrapper = styled.li`
                 flex: 0 0 4rem;
             }
             .opt-con {
-                display: block;
                 flex: 0 0 4rem;
+                display: flex;
+                align-items: center;
+                
             }
 
             .center-con {
@@ -91,18 +104,25 @@ const ItemWrapper = styled.li`
     }
 
 `
-const TaskItem: FC<TaskItemProps> = (props) => {
+const TaskItem: FC<Partial<TaskItemProps>> = (props) => {
+    const { task, checkChange } = props
+
+    const innerCheckChange: CheckboxProps['onChange'] = (checked) => {
+        if (checkChange) {
+            checkChange(task!, checked)
+        }
+    }
 
     return <ItemWrapper>
         <div className="check-box-con">
-            <ReactCheckBox />
+            <ReactCheckBox onChange={innerCheckChange} />
         </div>
         <div className='center-con'>
             <div className="name-con">
-                <span>task1</span>
+                <span>{task!.name}</span>
             </div>
             <div className="create-time-con">
-                <span>2022-10-10</span>
+                <span>最后更新于 2022-10-10</span>
             </div>
         </div>
 

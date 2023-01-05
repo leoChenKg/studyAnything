@@ -5,9 +5,9 @@ import classNames from 'classnames'
 export type CheckStatus = 'checked' | 'unchecked' | 'partial-checked'
 
 export interface CheckboxProps {
-    checkStatus?: CheckStatus,
-    className?: string,
-    onChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void
+    checkStatus: CheckStatus,
+    className: string,
+    onChange: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void
 }
 
 const CheckboxLabel = styled.label`
@@ -83,7 +83,7 @@ const PartialSvg = <svg
     ></path>
 </svg>
 
-const InnerCheckBox: ForwardRefRenderFunction<unknown, CheckboxProps> = (props, ref) => {
+const InnerCheckBox: ForwardRefRenderFunction<unknown, Partial<CheckboxProps>> = (props, ref) => {
     const { checkStatus = "unchecked", className, onChange } = props
     const innerRef = (ref as any) || createRef<HTMLInputElement>()
 
@@ -119,6 +119,6 @@ const InnerCheckBox: ForwardRefRenderFunction<unknown, CheckboxProps> = (props, 
     </CheckboxLabel >
 }
 
-const CheckBox = forwardRef<unknown, CheckboxProps>(InnerCheckBox)
+const CheckBox = forwardRef<unknown, Partial<CheckboxProps>>(InnerCheckBox)
 
 export default CheckBox

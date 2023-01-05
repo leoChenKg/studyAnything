@@ -42,28 +42,30 @@ const TaskHeadNav = styled.nav`
 
 
 export const ReactCheckBox = styled(CheckBox)`
-    width: 1.2rem;
-    height: 1.2rem;
+    transform: scale(1.1);
 
     @media (min-width: 768px) {
       & {
-        width: 1rem;
-        height: 1rem;
+        transform: scale(1);
       }
-
     }
 
 `
 
 
-const Nav = () => {
+interface NavProps {
+    checkStatus: CheckStatus
+}
+const Nav: FC<Partial<NavProps>> = (props) => {
+
+    const { checkStatus } = props
 
     const onChange: CheckboxProps["onChange"] = (status) => {
         console.log(status)
     }
     return <TaskHeadNav>
         <div className="check-box-con">
-            <ReactCheckBox onChange={onChange} />
+            <ReactCheckBox checkStatus={checkStatus} onChange={onChange} />
         </div>
         <div className="name-con">
             <span>任务名称</span>
