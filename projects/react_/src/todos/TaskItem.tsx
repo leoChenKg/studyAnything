@@ -1,15 +1,17 @@
-import { FC } from 'react'
+import { FC, useEffect, Dispatch, MouseEventHandler, MouseEvent } from 'react'
 import styled from 'styled-components'
 import { CheckboxProps } from './CheckBox'
 import { ReactCheckBox } from './TaskHeadNav'
-import { Task } from './useTask'
+import { Task, Action } from './useTask'
 
 export interface TaskItemProps {
     task: Task
-    checkChange: (task: Task, checked: boolean) => void
+    checkChange: (task: Task, checked: boolean) => void,
+    dispatch: Dispatch<Action>
+    onClick: (task: Task, event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>) => void
 }
 
-const ItemWrapper = styled.li`
+const ItemWrapper = styled('li')<{active:boolean}>`
     width: 100%;
     height: 4rem;
     display: flex;
@@ -18,6 +20,11 @@ const ItemWrapper = styled.li`
     font-size: 1rem;
     color: #1f2329;
     cursor: pointer;
+    border-radius: 8px;
+    transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    padding-left: 16px;
+
+   // TODO handler active
     
     .check-box-con, .name-con, .create-time-con,.opt-con {
         display: flex;
@@ -55,9 +62,16 @@ const ItemWrapper = styled.li`
         display: none;
     }
 
+    @media (any-hover:hover) { 
+        &:hover {
+            background-color:#edeeee ;
+        }
+    }
+    
 
     @media (min-width: 768px) {
         & {
+            padding-left: 0;
             flex-direction: row;
             height: 3.75rem;
             font-size: 0.875rem;
@@ -76,7 +90,6 @@ const ItemWrapper = styled.li`
                 flex: 1;
                 display: flex;
                 flex-direction: row;
-                /* justify-content: center; */
 
                 .name-con {
                     flex: 1.5 2;
@@ -93,11 +106,12 @@ const ItemWrapper = styled.li`
         &::after {
             content: '';
             display: block;
-            width: 100%;
             height: 0;
             border-bottom: 1px solid #eee;
             position: absolute;
             bottom: 0;
+            left: 16px;
+            right: 10px;
         }
 
       
@@ -105,17 +119,35 @@ const ItemWrapper = styled.li`
 
 `
 const TaskItem: FC<Partial<TaskItemProps>> = (props) => {
-    const { task, checkChange } = props
+    const { task, checkChange, dispatch, onClick } = props
 
     const innerCheckChange: CheckboxProps['onChange'] = (checked) => {
+        if (dispatch) {
+            dispatch({
+                type: "update",
+                paylod: { ...task!, checked }
+            })
+        }
         if (checkChange) {
             checkChange(task!, checked)
         }
     }
 
-    return <ItemWrapper>
-        <div className="check-box-con">
-            <ReactCheckBox onChange={innerCheckChange} />
+    const innerClick: MouseEventHandler<HTMLLIElement> = (e) => {
+        if (onClick) {
+            onClick(task!, e)
+        }
+    }
+
+    const StopBuble: MouseEventHandler<HTMLElement> = (e) => {
+        e.stopPropagation()
+    }
+
+
+
+    return <ItemWrapper onClick={innerClick} active={task?.active}>
+        <div className="check-box-con" onClick={StopBuble}>
+            <ReactCheckBox checkStatus={task?.checked ? 'checked' : 'unchecked'} onChange={innerCheckChange} />
         </div>
         <div className='center-con'>
             <div className="name-con">

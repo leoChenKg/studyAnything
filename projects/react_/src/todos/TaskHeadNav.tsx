@@ -4,13 +4,16 @@ import CheckBox, { CheckStatus, CheckboxProps } from "./CheckBox"
 
 
 
-const TaskHeadNav = styled.nav` 
+const TaskHeadNav = styled('nav')` 
+    background-color: #fff;
     height: 3rem;
     border-bottom: 1px solid #eee;
     display:  none;
     font-size: 0.875rem;
     color: #666;
-
+    position: sticky;
+    top: 0;
+    z-index: 9;
 
     .check-box-con, .name-con, .create-time-con,.opt-con {
         display: flex;
@@ -54,14 +57,18 @@ export const ReactCheckBox = styled(CheckBox)`
 
 
 interface NavProps {
-    checkStatus: CheckStatus
+    checkStatus: CheckStatus,
+    checkChange: (checked: boolean) => void
 }
 const Nav: FC<Partial<NavProps>> = (props) => {
 
-    const { checkStatus } = props
+    const { checkStatus, checkChange } = props
 
     const onChange: CheckboxProps["onChange"] = (status) => {
         console.log(status)
+        if (checkChange) {
+            checkChange(status)
+        }
     }
     return <TaskHeadNav>
         <div className="check-box-con">

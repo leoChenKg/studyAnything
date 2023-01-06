@@ -40,37 +40,61 @@ const NoDataWrapper = styled.div`
 const NoData = () => {
     return <NoDataWrapper> <p>暂无数据</p></NoDataWrapper>
 }
-
+declare global {
+    interface Window {
+        tasks: any;
+    }
+}
 const TodoApp = () => {
 
-    const [tasks, dispath] = useTask()
-
+    const [tasks, dispatch] = useTask()
     const [showDetails, setShowDetails] = useState(false)
     const [rootCheckStatus, setRootCheckStatus] = useState<CheckStatus>("unchecked")
-    const checkObj = useRef<{ [props: string]: boolean }>({})
+    const [activeTaskId, setActiveTaskId] = useState<string>()
 
     const MainClasses = classNames({ 'show-details': showDetails })
 
-    const checkChange = useCallback<TaskItemProps['checkChange']>((task, checked) => {
-        if (checked) {
-            checkObj.current[task.id] = checked
+    useEffect(() => {
+        const checkNum = tasks.reduce((a, b) => a + (b.checked ? 1 : 0), 0)
+        if (checkNum > 0 && checkNum < tasks.length) {
+            setRootCheckStatus('partial-checked')
+        } else if (checkNum === 0) {
+            setRootCheckStatus('unchecked')
         } else {
-            delete checkObj.current[task.id]
+            setRootCheckStatus('checked')
         }
+    }, [tasks])
 
-        // 设置 root checkbox 状态
-        const checkNum = Object.keys(checkObj.current).length 
-    }, [])
+
+    const rootcheckChange = (checked: boolean) => {
+        if (checked) {
+            dispatch({ type: 'checkAll' })
+        } else {
+            dispatch({ type: 'unCheckAll' })
+        }
+    }
+
+    const TaskItemClickHandler: TaskItemProps['onClick'] = (task) => {
+        setShowDetails(true)
+        dispatch({ type: "update", paylod: { ...task, 'active': true } })
+    }
 
     return (
         <App>
             <HeadNav />
             <Main className={MainClasses}>
                 <article>
-                    <TaskHeadNav checkStatus={rootCheckStatus} />
+                    {!showDetails ? <TaskHeadNav checkStatus={rootCheckStatus} checkChange={rootcheckChange} /> : null}
                     <ul>
                         {
-                            tasks.length ? tasks.map((task) => <TaskItem task={task} checkChange={checkChange} key={task.id} />) : <NoData />
+                            tasks.length
+                                ? tasks.map((task) => (<TaskItem
+                                    task={task}
+                                    dispatch={dispatch}
+                                    onClick={TaskItemClickHandler}
+                                    key={task.id}
+                                />))
+                                : <NoData />
                         }
                     </ul>
                 </article>

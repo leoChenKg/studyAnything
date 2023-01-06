@@ -1,18 +1,23 @@
-import { useReducer, useState, Reducer, Dispatch } from 'react'
+import { useReducer, useState, Reducer, Dispatch, useCallback } from 'react'
 
 export interface Task {
     id: string
     name: string
     createTime: string
-    details?: string
+    details?: string,
+    checked?: boolean,
+    active?: boolean
 }
 
 interface QureyTaskOptions { }
 
 export type TaskList = Task[]
-export interface Action {
+
+export type Action = {
     type: 'add' | 'remove' | 'update',
     paylod: Task
+} | {
+    type: 'checkAll' | 'unCheckAll',
 }
 const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] => {
 
@@ -23,114 +28,140 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
                 state.push(action.paylod)
                 return [...state]
             case 'remove':
-                console.log('remove')
                 return state
             case 'update':
-                console.log('update')
-                return state
+                const oldTaskIndex = state.findIndex(item => item.id == action.paylod.id)
+                state[oldTaskIndex] = action.paylod
+                return [...state]
+            case "checkAll":
+                return state.map((task) => task.checked ? task : ({ ...task, checked: true }))
+            case 'unCheckAll':
+                return state.map((task) => task.checked ? { ...task, checked: false } : task)
             default:
                 return state
         }
     }, [{
         id: '1',
         name: '任务一',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     }, {
         id: '2',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '3',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '4',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '5',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '6',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '7',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '8',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
+
     },
     {
-        id: '2',
+        id: '9',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '10',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '11',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '12',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '13',
         name: 'task2',
         createTime: '2023-01-05'
+        , checked: false
     },
     {
-        id: '2',
+        id: '14',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '15',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '16',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '17',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '18',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     {
-        id: '2',
+        id: '19',
         name: 'task2',
-        createTime: '2023-01-05'
+        createTime: '2023-01-05',
+        checked: false
     },
     ])
 
+    // const wrappedDispatch = useCallback((action: Action) => {
+    //     dispatch(action)
 
+    // }, [tasks])
     return [tasks, dispatch]
 
 }
-
 
 export default useTask

@@ -100,6 +100,7 @@ const InnerCheckBox: ForwardRefRenderFunction<unknown, Partial<CheckboxProps>> =
 
     useEffect(() => {
         setInnerStatus(checkStatus)
+        innerRef.current.checked = checkStatus === 'checked' ? true : false
     }, [checkStatus])
 
     useEffect(() => {
