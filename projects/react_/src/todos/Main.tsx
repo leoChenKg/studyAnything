@@ -15,7 +15,7 @@ const Main = styled.main`
         overflow-x: hidden;
         overflow-y: auto;
         flex: 0;
-        background: #eee;
+        background: #fff;
         transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
     }
 

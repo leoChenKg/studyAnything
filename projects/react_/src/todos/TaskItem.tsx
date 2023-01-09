@@ -126,12 +126,6 @@ const TaskItem: FC<Partial<TaskItemProps>> = (props) => {
     const { task, active, checkChange, dispatch, onClick } = props
 
     const innerCheckChange: CheckboxProps['onChange'] = (checked) => {
-        if (dispatch) {
-            dispatch({
-                type: "update",
-                paylod: { ...task!, checked }
-            })
-        }
         if (checkChange) {
             checkChange(task!, checked)
         }

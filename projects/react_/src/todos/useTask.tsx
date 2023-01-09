@@ -14,10 +14,12 @@ interface QureyTaskOptions { }
 export type TaskList = Task[]
 
 export type Action = {
-    type: 'add' | 'remove' | 'update',
+    type: 'add' | 'update',
     paylod: Task
 } | {
     type: 'checkAll' | 'unCheckAll',
+} | {
+    type: 'remove', paylod: string | string[]
 }
 const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] => {
 
@@ -25,10 +27,17 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
 
         switch (action.type) {
             case 'add':
-                state.push(action.paylod)
+                state.unshift(action.paylod)
                 return [...state]
             case 'remove':
-                return state
+                if (typeof action.paylod === 'string') {
+                    state.splice(state.findIndex(item => item.id === action.paylod), 1)
+                } else {
+                    action.paylod.forEach((taskId) => {
+                        state.splice(state.findIndex(item => item.id === taskId), 1)
+                    })
+                }
+                return [...state]
             case 'update':
                 const oldTaskIndex = state.findIndex(item => item.id == action.paylod.id)
                 state[oldTaskIndex] = action.paylod
@@ -44,123 +53,22 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
         id: '1',
         name: '任务一',
         createTime: '2023-01-05',
-        checked: false
+        checked: false,
+        details: '任务一详细内容'
     }, {
         id: '2',
         name: 'task2',
         createTime: '2023-01-05',
         checked: false
-    },
-    {
-        id: '3',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '4',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '5',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '6',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '7',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '8',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-
-    },
-    {
-        id: '9',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '10',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '11',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '12',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '13',
-        name: 'task2',
-        createTime: '2023-01-05'
-        , checked: false
-    },
-    {
-        id: '14',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '15',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '16',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '17',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '18',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
-    {
-        id: '19',
-        name: 'task2',
-        createTime: '2023-01-05',
-        checked: false
-    },
+    }
     ])
 
-    // const wrappedDispatch = useCallback((action: Action) => {
-    //     dispatch(action)
+    const wrappedDispatch = useCallback((action: Action) => {
+        console.log(action , tasks)
+        dispatch(action)
 
-    // }, [tasks])
-    return [tasks, dispatch]
+    }, [tasks])
+    return [tasks, wrappedDispatch]
 
 }
 

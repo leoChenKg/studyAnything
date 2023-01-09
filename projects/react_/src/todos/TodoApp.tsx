@@ -53,6 +53,7 @@ export const TaskProvider = createContext<{ tasks?: Task[], dispatch?: Dispatch<
 const TodoApp = () => {
 
     const [tasks, dispatch] = useTask()
+    debugger
     window.tasks = tasks
     const [showDetails, setShowDetails] = useState(false)
     const [rootCheckStatus, setRootCheckStatus] = useState<CheckStatus>("unchecked")
@@ -92,6 +93,16 @@ const TodoApp = () => {
         }
     }
 
+
+    const taskItemCheckChange: TaskItemProps['checkChange'] = (task, checked) => {
+        console.log(tasks)
+        const targetTask = tasks.find(item => item.id === task.id)!
+        dispatch({
+            type: "update",
+            paylod: { ...targetTask, checked }
+        })
+    }
+
     const TaskItemClickHandler: TaskItemProps['onClick'] = (task) => {
         // 设置当前的active项
         setActiveTaskId(task.id)
@@ -99,7 +110,6 @@ const TodoApp = () => {
         dispatch({ type: "update", paylod: { ...task, 'active': true } })
         // 打开详细详细窗口
         setShowDetails(true)
-        // 加载详情的数据
     }
 
     const closeDetail = () => {
@@ -111,10 +121,39 @@ const TodoApp = () => {
         dispatch({ type: "update", paylod: { ...curTask.current!, details: value } })
     }
 
+    const addTask = () => {
+        const newTask = {
+            id: "_id" + Math.random().toFixed(5),
+            'name': "新任务",
+            'createTime': '2023-01-09'
+        }
+        dispatch({
+            type: "add", paylod: newTask
+        })
+
+        // 设置当前的active项
+        setActiveTaskId(newTask.id)
+        // 修改数据状态为 active： true
+        dispatch({ type: "update", paylod: { ...newTask, 'active': true } })
+        // 打开详细详细窗口
+        setShowDetails(true)
+    }
+
+    const deelteTask = () => {
+        // 得到选中的项
+        const checkedTaskIds = tasks.filter(i => i.checked).map(i => i.id)
+        dispatch({ type: 'remove', paylod: checkedTaskIds })
+    }
+
+
+
     return (
         <App>
             <TaskProvider.Provider value={provideData}>
-                <HeadNav />
+                <HeadNav>
+                    <button onClick={addTask}>add</button>
+                    <button onClick={deelteTask}>deelte</button>
+                </HeadNav>
                 <Main className={MainClasses}>
                     <article>
                         {!showDetails ? <TaskHeadNav checkStatus={rootCheckStatus} checkChange={rootcheckChange} /> : null}
@@ -126,6 +165,7 @@ const TodoApp = () => {
                                         dispatch={dispatch}
                                         onClick={TaskItemClickHandler}
                                         active={activeTaskId === task.id}
+                                        checkChange={taskItemCheckChange}
                                         key={task.id}
                                     />))
                                     : <NoData />
