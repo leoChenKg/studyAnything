@@ -68,6 +68,7 @@ const Main = styled.main`
                 flex: 0 0 12rem;
 
                 ul {
+                    padding-left: 6px;
                     li {
                         border-radius: 0;
 
@@ -103,6 +104,7 @@ const Main = styled.main`
                 flex: 0 0 20rem;
 
                 ul {
+                    padding-left: 6px;
                     .center-con {
                         flex-direction: column;
                         justify-content: center;

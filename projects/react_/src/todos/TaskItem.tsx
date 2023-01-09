@@ -6,12 +6,13 @@ import { Task, Action } from './useTask'
 
 export interface TaskItemProps {
     task: Task
+    active: boolean,
     checkChange: (task: Task, checked: boolean) => void,
     dispatch: Dispatch<Action>
     onClick: (task: Task, event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>) => void
 }
 
-const ItemWrapper = styled('li')<{active:boolean}>`
+const ItemWrapper = styled('li') <{ active: boolean }>`
     width: 100%;
     height: 4rem;
     display: flex;
@@ -25,7 +26,9 @@ const ItemWrapper = styled('li')<{active:boolean}>`
     padding-left: 16px;
 
    // TODO handler active
-    
+   
+   background: ${(props) => props.active ? '#edeeee' : ''};
+
     .check-box-con, .name-con, .create-time-con,.opt-con {
         display: flex;
         align-items: center;
@@ -62,6 +65,7 @@ const ItemWrapper = styled('li')<{active:boolean}>`
         display: none;
     }
 
+    // 只有支持 hover 的设备才进行 hover 
     @media (any-hover:hover) { 
         &:hover {
             background-color:#edeeee ;
@@ -119,7 +123,7 @@ const ItemWrapper = styled('li')<{active:boolean}>`
 
 `
 const TaskItem: FC<Partial<TaskItemProps>> = (props) => {
-    const { task, checkChange, dispatch, onClick } = props
+    const { task, active, checkChange, dispatch, onClick } = props
 
     const innerCheckChange: CheckboxProps['onChange'] = (checked) => {
         if (dispatch) {
@@ -143,9 +147,7 @@ const TaskItem: FC<Partial<TaskItemProps>> = (props) => {
         e.stopPropagation()
     }
 
-
-
-    return <ItemWrapper onClick={innerClick} active={task?.active}>
+    return <ItemWrapper onClick={innerClick} active={active!}>
         <div className="check-box-con" onClick={StopBuble}>
             <ReactCheckBox checkStatus={task?.checked ? 'checked' : 'unchecked'} onChange={innerCheckChange} />
         </div>
