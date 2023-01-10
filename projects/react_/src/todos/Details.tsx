@@ -63,8 +63,7 @@ const Details: FC<DetailsProps> = (props) => {
         setInnerStatus("edit")
     }
     const saveHandler = () => {
-        const newTask = { ...task!, details: inputRef.current!.value }
-        dispatch!({ type: "update", paylod: newTask })
+        dispatch!({ type: "update", paylod: { id: task?.id!, propName: 'details', newValue: inputRef.current!.value } })
         onSave?.()
         setInnerStatus("view")
     }

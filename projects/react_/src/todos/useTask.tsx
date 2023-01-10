@@ -13,14 +13,25 @@ interface QureyTaskOptions { }
 
 export type TaskList = Task[]
 
+interface ActionPayload<T extends keyof Task> {
+    id: string,
+    propName: T,
+    newValue: Task[T]
+}
+
+interface UpdateAction {
+    type: "update",
+    paylod: ActionPayload<'active'> | ActionPayload<"checked"> | ActionPayload<"createTime"> | ActionPayload<"details"> | ActionPayload<"name">
+}
+
 export type Action = {
-    type: 'add' | 'update',
+    type: 'add',
     paylod: Task
 } | {
     type: 'checkAll' | 'unCheckAll',
 } | {
     type: 'remove', paylod: string | string[]
-}
+} | UpdateAction
 const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] => {
 
     const [tasks, dispatch] = useReducer<Reducer<TaskList, Action>>((state, action) => {
@@ -39,8 +50,9 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
                 }
                 return [...state]
             case 'update':
-                const oldTaskIndex = state.findIndex(item => item.id == action.paylod.id)
-                state[oldTaskIndex] = action.paylod
+                const { propName, newValue, id } = action.paylod
+                const oldTaskIndex = state.findIndex(item => item.id === id)
+                state[oldTaskIndex] = { ...state[oldTaskIndex], [propName]: newValue }
                 return [...state]
             case "checkAll":
                 return state.map((task) => task.checked ? task : ({ ...task, checked: true }))
@@ -64,7 +76,7 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
     ])
 
     const wrappedDispatch = useCallback((action: Action) => {
-        console.log(action , tasks)
+        console.log(action, tasks)
         dispatch(action)
     }, [tasks])
     return [tasks, wrappedDispatch]
@@ -72,3 +84,32 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
 }
 
 export default useTask
+
+
+
+
+
+
+interface A {
+    prop1: string,
+    prop2: boolean,
+    prop3: number,
+    prop4: string[],
+    prop5: () => void,
+    prop6: null,
+    prop7: undefined,
+    prop8: any,
+}
+
+/**
+ *  实现一个 B类型 
+ *  B 类型 有两个字段 propName、propValue ，  
+ *  其中 propName 取值类型是 A 类的 key 值（keyof A）。
+ *  propValue 的取值类型是根据 propName 的取值对应的  A[propName] 类型。
+ *  propValue 的类型根据 propName 的取值决定
+ *  比如 对象 b 是 B 类型
+ *      如果 b.propName 值是 'prop1' ，那么 b.propValue 的取值类型就只能是 string
+ *      如果 b.propName 值是 'prop2' ，那么 b.propValue 的取值类型就只能 boolean
+ *      如果 b.propName 值是 'prop3' ，那么 b.propValue 的取值类型就只能 number
+ *      ....
+ */

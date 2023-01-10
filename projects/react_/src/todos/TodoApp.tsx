@@ -53,11 +53,6 @@ const NoDataWrapper = styled.div`
 const NoData = () => {
     return <NoDataWrapper> <p>暂无数据</p></NoDataWrapper>
 }
-declare global {
-    interface Window {
-        tasks: any;
-    }
-}
 
 
 export const TaskProvider = createContext<{ tasks?: Task[], dispatch?: Dispatch<Action> }>({})
@@ -65,7 +60,6 @@ export const TaskProvider = createContext<{ tasks?: Task[], dispatch?: Dispatch<
 const TodoApp = () => {
     const [activedTask, setActivedTask] = useState<Task>()
     const [tasks, dispatch] = useTask()
-    window.tasks = tasks
     const provideData = useMemo(() => ({ tasks, dispatch }), [tasks, dispatch])
 
     const [rootCheckStatus, setRootCheckStatus] = useState<CheckStatus>()

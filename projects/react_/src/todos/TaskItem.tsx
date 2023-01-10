@@ -83,7 +83,7 @@ const TaskItem: FC<TaskItemProps> = (props) => {
         if (onCheckChange) {
             onCheckChange(task!, checked)
         }
-        dispatch!({ type: 'update', paylod: { ...task, checked } })
+        dispatch!({ type: 'update', paylod: { id: task.id, propName: 'checked', newValue: checked } })
     }
 
     const innerClick: MouseEventHandler<HTMLLIElement> = (e) => {
