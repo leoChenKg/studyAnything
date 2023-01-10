@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState, createContext, Dispatch, useMemo } from "react";
+import { useEffect, useState, createContext, Dispatch, useMemo } from "react";
 import styled from "styled-components";
-import classNames from 'classnames'
 import { GlobalStyle } from "./globalStyle";
-import Main from "./Main";
 import TaskHeadNav from './TaskHeadNav'
 import TaskItem, { TaskItemProps } from "./TaskItem";
 import useTask, { Action, Task } from "./useTask";
-import { CheckboxProps, CheckStatus } from "./CheckBox";
-import Details from "./Details";
+import { CheckStatus } from "./CheckBox";
+import Details, { DetailsProps } from "./Details";
 
 
 
@@ -22,6 +20,20 @@ const App = styled.div`
 const HeadNav = styled.div`
     flex: 0 0 4rem;
     border-bottom: 1px solid #eee;
+`
+
+const Main = styled.main`
+    display: flex;
+    height: calc(100% - 128px) ;
+    
+   
+    article {
+        width: 50%;
+    }
+
+    aside {
+        width: 50%;
+    }
 `
 
 const Footer = styled.div`
@@ -51,25 +63,18 @@ declare global {
 export const TaskProvider = createContext<{ tasks?: Task[], dispatch?: Dispatch<Action> }>({})
 
 const TodoApp = () => {
-
+    const [activedTask, setActivedTask] = useState<Task>()
     const [tasks, dispatch] = useTask()
-    debugger
     window.tasks = tasks
-    const [showDetails, setShowDetails] = useState(false)
-    const [rootCheckStatus, setRootCheckStatus] = useState<CheckStatus>("unchecked")
-    const [activeTaskId, setActiveTaskId] = useState<string>()
-    const curTask = useRef<Task>()
+    const provideData = useMemo(() => ({ tasks, dispatch }), [tasks, dispatch])
 
-    const MainClasses = classNames({ 'show-details': showDetails })
-
-    const provideData = useMemo(() => {
-        return {
-            tasks,
-            dispatch
-        }
-    }, [tasks, dispatch])
+    const [rootCheckStatus, setRootCheckStatus] = useState<CheckStatus>()
+    const [detailsStatus, setDetailsStatus] = useState<DetailsProps['status']>("view")
 
     useEffect(() => {
+        if (activedTask) {
+            setActivedTask(tasks.find(i => i.id === activedTask.id))
+        }
         const checkNum = tasks.reduce((a, b) => a + (b.checked ? 1 : 0), 0)
         if (checkNum > 0 && checkNum < tasks.length) {
             setRootCheckStatus('partial-checked')
@@ -80,100 +85,74 @@ const TodoApp = () => {
         }
     }, [tasks])
 
+    const TaskItemClickHandler: TaskItemProps['onClick'] = (task) => {
+        setDetailsStatus('view')
+        const targetTask = tasks.find(i => i.id === task.id)
+        setActivedTask(targetTask)
+    }
 
-    useEffect(() => {
-        curTask.current = tasks.find(task => task.id === activeTaskId)!
-    }, [activeTaskId, tasks])
+    const closeDetailsHandler = () => {
+        setDetailsStatus('view')
+        setActivedTask(x => undefined)
+    }
+
 
     const rootcheckChange = (checked: boolean) => {
         if (checked) {
-            dispatch({ type: 'checkAll' })
+            dispatch!({ type: 'checkAll' })
         } else {
-            dispatch({ type: 'unCheckAll' })
+            dispatch!({ type: 'unCheckAll' })
         }
     }
 
-
-    const taskItemCheckChange: TaskItemProps['checkChange'] = (task, checked) => {
-        console.log(tasks)
-        const targetTask = tasks.find(item => item.id === task.id)!
-        dispatch({
-            type: "update",
-            paylod: { ...targetTask, checked }
-        })
+    const deleteTask = () => {
+        const deleteTaskIds = tasks.filter(i => i.checked).map(i => i.id)
+        dispatch!({ type: "remove", paylod: deleteTaskIds })
     }
 
-    const TaskItemClickHandler: TaskItemProps['onClick'] = (task) => {
-        // 设置当前的active项
-        setActiveTaskId(task.id)
-        // 修改数据状态为 active： true
-        dispatch({ type: "update", paylod: { ...task, 'active': true } })
-        // 打开详细详细窗口
-        setShowDetails(true)
-    }
-
-    const closeDetail = () => {
-        dispatch({ type: "update", paylod: { ...curTask.current!, 'active': false } })
-        setActiveTaskId(undefined)
-        setShowDetails(false)
-    }
-    const saveDetail = (value: string) => {
-        dispatch({ type: "update", paylod: { ...curTask.current!, details: value } })
-    }
 
     const addTask = () => {
         const newTask = {
-            id: "_id" + Math.random().toFixed(5),
-            'name': "新任务",
-            'createTime': '2023-01-09'
+            id: `id_${Math.random().toFixed(10)}`,
+            name: 'new task',
+            createTime: '2023-01-10'
         }
-        dispatch({
-            type: "add", paylod: newTask
-        })
-
-        // 设置当前的active项
-        setActiveTaskId(newTask.id)
-        // 修改数据状态为 active： true
-        dispatch({ type: "update", paylod: { ...newTask, 'active': true } })
-        // 打开详细详细窗口
-        setShowDetails(true)
+        dispatch!({ type: "add", paylod: newTask })
+        setActivedTask(newTask)
+        setDetailsStatus('edit')
     }
-
-    const deelteTask = () => {
-        // 得到选中的项
-        const checkedTaskIds = tasks.filter(i => i.checked).map(i => i.id)
-        dispatch({ type: 'remove', paylod: checkedTaskIds })
-    }
-
-
-
     return (
         <App>
             <TaskProvider.Provider value={provideData}>
                 <HeadNav>
                     <button onClick={addTask}>add</button>
-                    <button onClick={deelteTask}>deelte</button>
+                    <button onClick={deleteTask}>delete</button>
                 </HeadNav>
-                <Main className={MainClasses}>
+                <Main>
                     <article>
-                        {!showDetails ? <TaskHeadNav checkStatus={rootCheckStatus} checkChange={rootcheckChange} /> : null}
+                        <TaskHeadNav checkStatus={rootCheckStatus} checkChange={rootcheckChange} />
                         <ul>
                             {
                                 tasks.length
                                     ? tasks.map((task) => (<TaskItem
-                                        task={task}
-                                        dispatch={dispatch}
-                                        onClick={TaskItemClickHandler}
-                                        active={activeTaskId === task.id}
-                                        checkChange={taskItemCheckChange}
                                         key={task.id}
+                                        task={task}
+                                        active={activedTask?.id === task.id}
+                                        onClick={TaskItemClickHandler}
                                     />))
                                     : <NoData />
                             }
                         </ul>
                     </article>
                     <aside>
-                        <Details taskId={activeTaskId} close={closeDetail} save={saveDetail} dispatch={dispatch} />
+                        <Details
+                            task={activedTask}
+                            show={!!activedTask}
+                            status={detailsStatus}
+                            onSave={() => setDetailsStatus('view')}
+                            onClose={closeDetailsHandler}
+                            onEdit={() => setDetailsStatus('edit')}
+                        />
                     </aside>
                 </Main>
                 <Footer />

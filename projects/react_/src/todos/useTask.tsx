@@ -1,4 +1,4 @@
-import { useReducer, useState, Reducer, Dispatch, useCallback } from 'react'
+import { useReducer, Reducer, Dispatch, useCallback } from 'react'
 
 export interface Task {
     id: string
@@ -66,7 +66,6 @@ const useTask = (options: QureyTaskOptions = {}): [TaskList, Dispatch<Action>] =
     const wrappedDispatch = useCallback((action: Action) => {
         console.log(action , tasks)
         dispatch(action)
-
     }, [tasks])
     return [tasks, wrappedDispatch]
 

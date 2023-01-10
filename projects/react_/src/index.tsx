@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 // import App from './App'
 // import HooksApp from './HooksApp'
 import TodoApp from './todos/TodoApp'
+import Test from './test'
 
 const root = createRoot(document.getElementById('app')!)
 root.render(

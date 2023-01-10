@@ -1,96 +1,83 @@
-import { FC, useEffect, useRef, Dispatch, useContext, useState, FormEventHandler, useCallback } from 'react'
-import useDetails from './useDetails'
-import { Action } from './useTask'
+import { FC, useEffect, useRef, useContext, useState } from 'react'
 import { TaskProvider } from './TodoApp'
+import { Task } from '../todos/useTask'
+import styled from 'styled-components'
 
 
-interface Props {
-    status?: "edit" | "view"
-    taskId?: string,
-    close?: () => void,
-    save?: (value: string) => void,
-    dispatch: Dispatch<Action>
+export interface DetailsProps {
+    show: boolean,
+    task?: Task,
+    status: "edit" | "view"
+    onClose?: () => void,
+    onSave?: () => void,
+    onEdit?: () => void,
 }
 
+const DetailsWrapper = styled('div') <{ show: boolean }>`
+   ${(props) => `display: ${props.show ? 'block' : 'none'};`}
+   padding: 16px;
+   position: relative;
 
+   .btn-con {
+        position:absolute;
+        top:16px;
+        right:16px;
+   }
+`
 
-const debounce = (fn: Function, delay: number) => {
-    let timer: number
-    return (...args: any[]) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-            fn(...args)
-        }, delay)
-    }
-}
-const Details: FC<Props> = (props) => {
-    const { taskId, status } = props
-    const { tasks, dispatch } = useContext(TaskProvider)
+const StyledTextarea = styled.textarea`
+    width: 100%;
+    height: 200px;
+    /* outline: none; */
+    /* border: none; */
+    resize: none;
+    font-size: 16px;
+    font-family: inherit;
+`
+
+const Details: FC<DetailsProps> = (props) => {
+    const { task, status, show, onClose, onSave, onEdit } = props
     const inputRef = useRef<HTMLTextAreaElement>(null)
-    const details = useDetails({ taskId: taskId as string })
+    const [innerStatus, setInnerStatus] = useState<DetailsProps['status']>()
 
-    const [innerStatus, setInnerStatus] = useState<Props['status']>()
+    const { dispatch } = useContext(TaskProvider)
 
     useEffect(() => {
         setInnerStatus(status)
     }, [status])
 
-    const curTask = tasks?.find(item => item.id === taskId)
-
     useEffect(() => {
-        setInnerStatus("view")
-    }, [taskId])
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.value = details ? details : ''
-            if (innerStatus === 'edit') {
-                inputRef.current.focus()
-            }
+        if (innerStatus === 'edit' && inputRef.current) {
+            inputRef.current.value = task!.details || ''
+            inputRef.current.focus()
         }
-    }, [taskId, innerStatus])
+    }, [innerStatus])
+
 
     const closeHandler = () => {
-        if (props.close) {
-            props.close()
-        }
-        if (inputRef.current) {
-            inputRef.current.value = ''
-        }
+        onClose?.()
         setInnerStatus("view")
     }
-
-    const saveHandler = () => {
-        if (props.save)
-            props.save(inputRef.current!.value)
-        dispatch!({ type: "update", paylod: { ...curTask!, details: inputRef.current!.value } })
-        setInnerStatus("view")
-    }
-
     const editHandler = () => {
+        onEdit?.()
         setInnerStatus("edit")
     }
+    const saveHandler = () => {
+        const newTask = { ...task!, details: inputRef.current!.value }
+        dispatch!({ type: "update", paylod: newTask })
+        onSave?.()
+        setInnerStatus("view")
+    }
 
-    const nameChange = useCallback(debounce((e: any) => {
-        console.log('执行----', e.target.innerHTML)
-        dispatch!({ type: "update", paylod: { ...curTask!, name: (e.target as HTMLDivElement).innerHTML } })
-    }, 1000), [curTask])
-
-
-
-    return <article>
-        {innerStatus === "edit" ? <div suppressContentEditableWarning contentEditable={true} onInput={nameChange}> {curTask?.name}  </div> : <h3>  {curTask?.name}  </h3>}
-
-        {innerStatus === "edit" ? <textarea ref={inputRef} ></textarea> : details}
-        <div>
+    return <DetailsWrapper show={show}>
+        <h3>  {task?.name}  </h3>
+        {innerStatus === "edit" ? <StyledTextarea ref={inputRef} /> : task?.details}
+        <div className='btn-con'>
             <button onClick={closeHandler}>close</button>
             <button onClick={editHandler}>edit</button>
-            <button onClick={saveHandler}>save</button>
+            <button onClick={saveHandler} disabled={innerStatus === 'view'}>save</button>
         </div>
-
-    </article>
+    </DetailsWrapper>
 }
 
 export default Details
